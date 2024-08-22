@@ -8,6 +8,13 @@ const Divided = () => {
 
   const storedData = JSON.parse(localStorage.getItem("data")) || [];
 
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    const newTotal = storedData.reduce((sum, item) => sum + item.price, 0);
+    setTotal(newTotal);
+  }, [data]);
+
   const classes =
     "text-xl text-slate-100 border border-slate-200 p-4 rounded-2xl text-center";
 
