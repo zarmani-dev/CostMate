@@ -17,7 +17,7 @@ const NewItemList = () => {
   const handleAddButton = () => {
     if (newData.length > 0) {
       useStore.setState({ data: [...data, ...newData] });
-      navigate("/");
+      navigate("/home");
     } else {
       Swal.fire({
         title: "No items was added",
@@ -32,7 +32,7 @@ const NewItemList = () => {
         confirmButtonText: "Save",
       }).then((result) => {
         if (result.isConfirmed) {
-          navigate("/");
+          navigate("/home");
         }
       });
     }

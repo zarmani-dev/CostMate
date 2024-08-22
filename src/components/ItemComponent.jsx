@@ -57,7 +57,7 @@ const ItemComponent = ({
           Save
         </Link>
         <Link
-          to={"/"}
+          to={"/home"}
           className="bg-red-700 text-slate-100 px-4 py-2 rounded-xl text-center"
         >
           Cancel

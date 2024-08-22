@@ -27,11 +27,11 @@ const EditItem = () => {
         confirmButtonText: "Save",
       }).then((result) => {
         if (result.isConfirmed) {
-          navigate("/");
+          navigate("/home");
         }
       });
     } else {
-      navigate("/");
+      navigate("/home");
     }
   };
 
