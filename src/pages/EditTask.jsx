@@ -4,12 +4,10 @@ import ProtectedRoute from "./ProtectedRoute";
 
 const EditTask = () => {
   return (
-    <ProtectedRoute>
-      <div className="p-10">
-        <NewItemAdd />
-        <EditItem />
-      </div>
-    </ProtectedRoute>
+    <div className="p-10">
+      <NewItemAdd />
+      <EditItem />
+    </div>
   );
 };
 

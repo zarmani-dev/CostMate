@@ -5,6 +5,8 @@ import CreateTask from "../pages/CreateTask";
 import EditTask from "../pages/EditTask";
 import Register from "../pages/Register";
 import Login from "../pages/Login";
+import PublicRoute from "../pages/PublicRoute";
+import ProtectedRoute from "../pages/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -17,23 +19,43 @@ const router = createBrowserRouter([
       },
       {
         path: "login",
-        element: <Login />,
+        element: (
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        ),
       },
       {
         path: "register",
-        element: <Register />,
+        element: (
+          <PublicRoute>
+            <Register />
+          </PublicRoute>
+        ),
       },
       {
         path: "home",
-        element: <Home />,
+        element: (
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "create",
-        element: <CreateTask />,
+        element: (
+          <ProtectedRoute>
+            <CreateTask />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "edit",
-        element: <EditTask />,
+        element: (
+          <ProtectedRoute>
+            <EditTask />
+          </ProtectedRoute>
+        ),
       },
     ],
   },
