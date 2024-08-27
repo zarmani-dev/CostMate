@@ -1,18 +1,17 @@
 import useStore from "../store/useStore";
 import useNewItem from "../store/useNewItem";
 import ItemComponent from "./ItemComponent";
-import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import Empty from "./Empty";
+import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import Swal from "sweetalert2";
+
+import { doc, deleteDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 const NewItemList = () => {
   const navigate = useNavigate();
   const { newData } = useNewItem();
   const { data } = useStore();
-
-  console.log(newData);
 
   const handleAddButton = () => {
     if (newData.length > 0) {
@@ -38,7 +37,7 @@ const NewItemList = () => {
     }
   };
 
-  const handleDeleteButton = (id) => {
+  const handleDeleteButton = async (id) => {
     Swal.fire({
       title: "Are you sure to delete this item?",
       text: "You won't be able to revert this!",
@@ -56,26 +55,14 @@ const NewItemList = () => {
         useNewItem.setState({ newData: newDataList });
         toast.success("Item deleted successfully");
 
-        const storedData = JSON.parse(localStorage.getItem("data")) || [];
-
-        localStorage.setItem(
-          "data",
-          JSON.stringify(storedData.filter((item) => item.id !== id))
-        );
+        // Delete from firestore
+        const deletedItem = async (id) => {
+          const docRef = doc(db, "items", id);
+          await deleteDoc(docRef);
+        };
+        deletedItem(id);
       }
     });
-    // if (Swal) {
-    //   const newDataList = newData.filter((item) => item.id !== id);
-    //   useNewItem.setState({ newData: newDataList });
-    //   toast.success("Item deleted successfully");
-
-    //   const storedData = JSON.parse(localStorage.getItem("data")) || [];
-
-    //   localStorage.setItem(
-    //     "data",
-    //     JSON.stringify(storedData.filter((item) => item.id !== id))
-    //   );
-    // }
   };
 
   return (

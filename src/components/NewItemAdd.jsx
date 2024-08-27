@@ -4,6 +4,9 @@ import useStore from "../store/useStore";
 import useNewItem from "../store/useNewItem";
 import useEditItem from "../store/useEditItem";
 
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
+
 // Function to get today's date in YYYY-MM-DD format
 const getTodayDate = () => {
   const today = new Date();
@@ -34,13 +37,14 @@ const NewItemAdd = () => {
     setSelectedDate(newDate);
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
     const newItem = {
       id: uuidv4(),
       date: formatDate(selectedDate),
       category: itemName.current.value,
       price: +itemPrice.current.value,
       editable: false,
+      user: auth.currentUser.uid ? auth.currentUser.uid : null,
     };
 
     if (itemName.current.value && itemPrice.current.value) {
@@ -48,10 +52,13 @@ const NewItemAdd = () => {
       addEditItem(newItem);
 
       // Update local storage
-      const storedData = JSON.parse(localStorage.getItem("data")) || [];
-      if (!storedData.includes(newItem.id)) {
-        localStorage.setItem("data", JSON.stringify([...storedData, newItem]));
-      }
+      // const storedData = JSON.parse(localStorage.getItem("data")) || [];
+      // if (!storedData.includes(newItem.id)) {
+      //   localStorage.setItem("data", JSON.stringify([...storedData, newItem]));
+      // }
+
+      // Add item to Firestore
+      await setDoc(doc(db, "items", newItem.id), newItem);
 
       itemName.current.value = "";
       itemPrice.current.value = "";

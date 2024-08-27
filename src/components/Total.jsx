@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from "react";
 import useStore from "../store/useStore";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
 
 const Total = () => {
-  const { data } = useStore();
-
-  const storedData = JSON.parse(localStorage.getItem("data")) || [];
-
   const [total, setTotal] = useState(0);
 
+  // Fetch data from Firestore
   useEffect(() => {
-    const newTotal = storedData.reduce((sum, item) => sum + item.price, 0);
-    setTotal(newTotal);
-  }, [data]);
+    const fetchDataFromFirestore = async () => {
+      const querySnapshot = await getDocs(collection(db, "items"));
+      const items = [];
+      querySnapshot.forEach((doc) => {
+        items.push(doc.data());
+      });
+      setTotal(items.reduce((sum, item) => sum + item.price, 0));
+    };
+
+    fetchDataFromFirestore();
+  }, []);
 
   return (
     <section className="px-10 py-6">

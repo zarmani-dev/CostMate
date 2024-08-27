@@ -4,6 +4,8 @@ import ItemComponent from "./ItemComponent";
 import useEditItem from "../store/useEditItem";
 import toast, { Toaster } from "react-hot-toast";
 import Swal from "sweetalert2";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db } from "../firebase";
 
 const EditItem = () => {
   const location = useLocation();
@@ -53,30 +55,20 @@ const EditItem = () => {
         const newDataList = newEditData.filter((item) => item.id !== id);
         useEditItem.setState({ newEditData: newDataList });
 
-        const storedData = JSON.parse(localStorage.getItem("data")) || [];
+        // Delete from firestore
+        const deletedItem = async (id) => {
+          const docRef = doc(db, "items", id);
+          await deleteDoc(docRef);
+        };
+        deletedItem(id);
+        // const storedData = JSON.parse(localStorage.getItem("data")) || [];
 
-        localStorage.setItem(
-          "data",
-          JSON.stringify(storedData.filter((item) => item.id !== id))
-        );
+        // localStorage.setItem(
+        //   "data",
+        //   JSON.stringify(storedData.filter((item) => item.id !== id))
+        // );
       }
     });
-    // if (confirm("Are you sure you want to delete this item?")) {
-    //   toast.success("Item deleted successfully");
-    //   const newDataList = newEditData.filter((item) => item.id !== id);
-    //   useEditItem.setState({ newEditData: newDataList });
-
-    //   const storedData = JSON.parse(localStorage.getItem("data")) || [];
-
-    //   localStorage.setItem(
-    //     "data",
-    //     JSON.stringify(storedData.filter((item) => item.id !== id))
-    //   );
-    // }
-
-    // TODO: will use later
-    // useStore.setState({ data: newDataList }); // Update data state
-    // localStorage.setItem("data", JSON.stringify(newDataList)); // Update local storage
   };
 
   return (

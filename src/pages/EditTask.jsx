@@ -1,6 +1,5 @@
 import EditItem from "../components/EditItem";
 import NewItemAdd from "../components/NewItemAdd";
-import ProtectedRoute from "./ProtectedRoute";
 
 const EditTask = () => {
   return (

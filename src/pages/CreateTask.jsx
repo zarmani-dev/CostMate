@@ -1,6 +1,5 @@
 import NewItemAdd from "../components/NewItemAdd";
 import NewItemList from "../components/NewItemList";
-import ProtectedRoute from "./ProtectedRoute";
 
 const CreateTask = () => {
   return (

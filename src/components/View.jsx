@@ -7,16 +7,36 @@ import useEditItem from "../store/useEditItem";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import getItemAsync from "../utils/getItemAsync";
+import { db } from "../firebase";
+import { collection, getDoc, getDocs } from "firebase/firestore";
 const View = () => {
   const { data } = useStore();
   const { newData } = useNewItem();
   const { newEditData, setEditData } = useEditItem();
+  const [allData, setAllData] = useState([]);
+  // console.log(allData);
 
-  const storedData = JSON.parse(localStorage.getItem("data")) || [];
+  // const itemsFromFirestore = async () => {
+  //   const querySnapshot = await getDocs(collection(db, "items"));
+  //   querySnapshot.forEach((doc) => {
+  //     // doc.data() is never undefined for query doc snapshots
+  //     return doc.data();
+  //   });
+  // };
 
-  const [allData, setAllData] = useState(storedData);
+  // Fetch data from Firestore
+  useEffect(() => {
+    const fetchDataFromFirestore = async () => {
+      const querySnapshot = await getDocs(collection(db, "items"));
+      const items = [];
+      querySnapshot.forEach((doc) => {
+        items.push(doc.data());
+      });
+      setAllData(items);
+    };
 
-  console.log(allData);
+    fetchDataFromFirestore();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
